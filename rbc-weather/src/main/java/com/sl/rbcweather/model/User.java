@@ -6,6 +6,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * @author Santiago Leiva
+ * 02/05/2018
+ */
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "user")

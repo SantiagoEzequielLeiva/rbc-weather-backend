@@ -10,6 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+/**
+ * @author Santiago Leiva
+ * 02/05/2018
+ */
+
 @MappedSuperclass
 @Access(AccessType.FIELD)
 @SuppressWarnings("serial")

@@ -1,5 +1,10 @@
 package com.sl.rbcweather.util;
 
+/**
+ * @author Santiago Leiva
+ * 02/05/2018
+ */
+
 public class RestResponse {
 	
 	private Integer responseCode;
