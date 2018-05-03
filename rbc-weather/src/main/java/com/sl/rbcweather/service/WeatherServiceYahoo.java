@@ -5,8 +5,6 @@ import java.util.Date;
 
 import javax.xml.bind.JAXBException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.github.fedy2.weather.YahooWeatherService;
 import com.github.fedy2.weather.data.Channel;
 import com.github.fedy2.weather.data.unit.DegreeUnit;
@@ -16,8 +14,10 @@ import com.sl.rbcweather.model.Board;
  * @author Santiago Leiva
  * 03/05/2018
  */
+
 public class WeatherServiceYahoo implements WeatherService {
-	private YahooWeatherService service;
+	
+	private YahooWeatherService weatherService;
 	
 	@Override
 	public Board updateBoard(Board board) {
@@ -27,9 +27,9 @@ public class WeatherServiceYahoo implements WeatherService {
 	@Override
 	public Board updateBoard(Board board, Date lastCheck) {
 		try {
-			this.service = new YahooWeatherService();
+			this.weatherService = new YahooWeatherService();
 			
-			Channel channel = this.service.getForecast(board.getWoeid(), DegreeUnit.FAHRENHEIT);
+			Channel channel = this.weatherService.getForecast(board.getWoeid(), DegreeUnit.FAHRENHEIT);
 			
 			board.setTemperature(channel.getItem().getCondition().getTemp());
 			board.setDegreeUnits(channel.getUnits().getTemperature().name());

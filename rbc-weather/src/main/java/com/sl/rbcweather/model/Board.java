@@ -1,5 +1,6 @@
 package com.sl.rbcweather.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,12 +11,18 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author Santiago Leiva
@@ -26,7 +33,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "board")
 @Access(AccessType.FIELD)
-public class Board extends ParentEntity {
+@Data
+@EqualsAndHashCode(exclude = { "users" })
+public class Board implements Serializable {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id", unique = true, nullable = false)
+	protected Long id;
 	
 	@Column(name = "city", nullable = false)
 	private String city;
@@ -64,101 +78,5 @@ public class Board extends ParentEntity {
 			},
 			mappedBy = "boards")
 	private Set<User> users = new HashSet<User>();
-
-	public Board() {}
-
-	public Board(String city, String country, String woeid, Integer temperature, String degreeUnits, String iconPath,
-			Integer code, String description, Date lastCheck) {
-		super();
-		this.city = city;
-		this.country = country;
-		this.woeid = woeid;
-		this.temperature = temperature;
-		this.degreeUnits = degreeUnits;
-		this.iconPath = iconPath;
-		this.code = code;
-		this.description = description;
-		this.lastCheck = lastCheck;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public String getWoeid() {
-		return woeid;
-	}
-
-	public void setWoeid(String woeid) {
-		this.woeid = woeid;
-	}
-
-	public Integer getTemperature() {
-		return temperature;
-	}
-
-	public void setTemperature(Integer temperature) {
-		this.temperature = temperature;
-	}
-
-	public String getDegreeUnits() {
-		return degreeUnits;
-	}
-
-	public void setDegreeUnits(String degreeUnits) {
-		this.degreeUnits = degreeUnits;
-	}
-
-	public String getIconPath() {
-		return iconPath;
-	}
-
-	public void setIconPath(String iconPath) {
-		this.iconPath = iconPath;
-	}
-
-	public Integer getCode() {
-		return code;
-	}
-
-	public void setCode(Integer code) {
-		this.code = code;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Date getLastCheck() {
-		return lastCheck;
-	}
-
-	public void setLastCheck(Date lastCheck) {
-		this.lastCheck = lastCheck;
-	}
-
-	public Set<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
 
 }
