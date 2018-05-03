@@ -42,7 +42,7 @@ public class User implements Serializable {
 	private String username;
 
 	@ManyToMany(fetch = FetchType.LAZY,
-			cascade = { CascadeType.PERSIST })
+			cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinTable(name = "user_board",
 			joinColumns = { @JoinColumn(name = "id_user") },
 			inverseJoinColumns = { @JoinColumn(name = "id_board") })
@@ -50,6 +50,10 @@ public class User implements Serializable {
 	
 	public void addBoard(Board board) {
 		this.getBoards().add(board);
+	}
+	
+	public void removeBoard(Board board) {
+		this.getBoards().remove(board);
 	}
 
 }

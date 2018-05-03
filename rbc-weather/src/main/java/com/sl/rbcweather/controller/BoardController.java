@@ -1,11 +1,11 @@
 package com.sl.rbcweather.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sl.rbcweather.model.Board;
 import com.sl.rbcweather.model.User;
 import com.sl.rbcweather.service.BoardService;
@@ -43,9 +41,17 @@ public class BoardController {
 	}
 	
 	@PostMapping(value = "/{username}")
-	public RestResponse addBoard(@PathVariable String username, @RequestBody Board board) throws JsonParseException, JsonMappingException, IOException {
+	public RestResponse addBoard(@PathVariable String username, @RequestBody Board board) {
 		this.userService.addBoard(username, board);
 		
 		return new RestResponse(HttpStatus.OK.value(), "The board has been added");
 	}
+	
+	@DeleteMapping(value = "/{username}")
+	public RestResponse removeBoard(@PathVariable String username, @RequestBody Board board) {
+		this.userService.removeBoard(username, board);
+		
+		return new RestResponse(HttpStatus.OK.value(), "The board has been removed");
+	}
+	
 }

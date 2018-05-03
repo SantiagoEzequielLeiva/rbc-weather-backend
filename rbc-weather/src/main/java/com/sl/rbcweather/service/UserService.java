@@ -45,5 +45,12 @@ public interface UserService {
 	 * @param board
 	 */
 	void addBoard(String username, Board board);
+	
+	/**
+	 * Se elimina la asociacion entre un usuario y un board
+	 * @param username
+	 * @param board
+	 */
+	void removeBoard(String username, Board board);
 
 }

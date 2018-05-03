@@ -54,4 +54,13 @@ public class UserServiceImpl implements UserService {
 		save(user);
 	}
 
+	@Override
+	public void removeBoard(String username, Board board) {
+		User user = getByUsername(username);
+		
+		user.removeBoard(board);
+		
+		save(user);
+	}
+
 }
