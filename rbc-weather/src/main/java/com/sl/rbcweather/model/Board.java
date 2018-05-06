@@ -40,7 +40,7 @@ public class Board implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", unique = true, nullable = false)
-	protected Long id;
+	private Long id;
 	
 	@Column(name = "city", nullable = false)
 	private String city;
