@@ -49,9 +49,9 @@ public class BoardController {
 		return new RestResponse(HttpStatus.OK.value(), "The board has been added");
 	}
 	
-	@DeleteMapping(value = "/{username}")
-	public RestResponse removeBoard(@PathVariable String username, @RequestBody Board board) {
-		this.userService.removeBoard(username, board);
+	@DeleteMapping(value = "/{username}/{board}")
+	public RestResponse removeBoard(@PathVariable String username, @PathVariable Long board) {
+		this.userService.removeBoard(username, this.boardService.getById(board));
 		
 		return new RestResponse(HttpStatus.OK.value(), "The board has been removed");
 	}

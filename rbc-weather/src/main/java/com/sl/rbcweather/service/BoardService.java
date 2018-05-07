@@ -18,6 +18,13 @@ public interface BoardService {
 	List<Board> list();
 	
 	/**
+	 * Obtenemos un board por su Id
+	 * @param id
+	 * @return Board
+	 */
+	Board getById(Long id);
+	
+	/**
 	 * Se guarda/actualiza un board
 	 * @param board
 	 * @return Board

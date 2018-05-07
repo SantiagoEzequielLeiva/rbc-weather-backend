@@ -29,6 +29,11 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
+	public Board getById(Long id) {
+		return this.boardRepository.findById(id).get();
+	}
+	
+	@Override
 	public Board save(Board board) {
 		return this.boardRepository.save(board);
 	}
