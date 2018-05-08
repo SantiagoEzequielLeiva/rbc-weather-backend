@@ -1,5 +1,7 @@
 package com.sl.rbcweather.service;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,20 @@ public class BoardServiceImpl implements BoardService {
 		save(board);
 		
 		return board;
+	}
+
+	@Override
+	public List<Board> boardsReadyToUpdate() {
+		Calendar lastCheckCalendar = GregorianCalendar.getInstance();
+		
+		lastCheckCalendar.add(Calendar.HOUR, -1);
+		
+		return this.boardRepository.findBoardsReadyToUpdate( lastCheckCalendar.getTime() );
+	}
+
+	@Override
+	public Board findByWoeid(String woeid) {
+		return this.boardRepository.findByWoeid(woeid);
 	}
 
 }

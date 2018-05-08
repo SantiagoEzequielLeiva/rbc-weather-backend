@@ -1,6 +1,5 @@
 package com.sl.rbcweather;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +30,10 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	 */
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {
-		List<Board> boards = this.boardService.list();
-		
-		Date lastCheck = new Date();
+		List<Board> boards = this.boardService.boardsReadyToUpdate();
 		
 		for (Board board : boards) {
-			this.weatherService.updateBoard(board, lastCheck);
+			this.weatherService.updateBoard(board);
 			this.boardService.save(board);
 		}
 	}

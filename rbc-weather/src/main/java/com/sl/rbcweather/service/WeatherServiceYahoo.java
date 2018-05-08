@@ -21,11 +21,6 @@ public class WeatherServiceYahoo implements WeatherService {
 	
 	@Override
 	public Board updateBoard(Board board) {
-		return updateBoard(board, null);
-	}
-
-	@Override
-	public Board updateBoard(Board board, Date lastCheck) {
 		try {
 			this.weatherService = new YahooWeatherService();
 			
@@ -36,11 +31,7 @@ public class WeatherServiceYahoo implements WeatherService {
 			board.setCode(channel.getItem().getCondition().getCode());
 			board.setDescription(channel.getItem().getCondition().getText());
 			board.setIconPath("http://l.yimg.com/a/i/us/we/52/".concat(String.valueOf(channel.getItem().getCondition().getCode())).concat(".gif"));
-			
-			if ( lastCheck != null )
-				board.setLastCheck(lastCheck);
-			else
-				board.setLastCheck(new Date());
+			board.setLastCheck(new Date());
 			
 		} catch (JAXBException | IOException e) {
 			e.printStackTrace();

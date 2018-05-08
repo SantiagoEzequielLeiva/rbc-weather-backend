@@ -1,5 +1,6 @@
 package com.sl.rbcweather.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import com.sl.rbcweather.model.Board;
 import com.sl.rbcweather.model.User;
 import com.sl.rbcweather.service.BoardService;
 import com.sl.rbcweather.service.UserService;
+import com.sl.rbcweather.util.LocationFinder;
 import com.sl.rbcweather.util.RestResponse;
 
 @CrossOrigin(origins="*", maxAge = 3600)
@@ -54,6 +56,21 @@ public class BoardController {
 		this.userService.removeBoard(username, this.boardService.getById(board));
 		
 		return new RestResponse(HttpStatus.OK.value(), "The board has been removed");
+	}
+	
+	@GetMapping(value = "/location/{term}")
+	public List<Board> locationBoards(@PathVariable String term) {
+		LocationFinder locationFinder = new LocationFinder();
+		
+		List<Board> boards = new ArrayList<Board>();
+		
+		try {
+			boards = locationFinder.findByTerm(term);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+		
+		return boards;
 	}
 	
 }
