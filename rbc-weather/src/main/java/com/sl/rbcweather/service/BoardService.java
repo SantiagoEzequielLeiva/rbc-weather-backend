@@ -52,4 +52,19 @@ public interface BoardService {
 	 * @return Board
 	 */
 	Board updateBoard(Board board);
+	
+	/**
+	 * Se buscan los codigos WOEID de locaciones que contengan en su ciudad o pais el texto que se pasa por parametro.
+	 * @param term
+	 * @return List<String>
+	 */
+	List<String> getWoeidByTerm(String term);
+	
+	/**
+	 * Se buscan locaciones en base a un texto dado.
+	 * Pueden ser boars ya guardados o no.
+	 * @param term
+	 * @return List<Board>
+	 */
+	List<Board> findByTerm(String term);
 }

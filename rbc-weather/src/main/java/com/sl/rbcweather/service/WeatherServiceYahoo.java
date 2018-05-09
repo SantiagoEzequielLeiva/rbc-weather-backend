@@ -27,7 +27,7 @@ public class WeatherServiceYahoo implements WeatherService {
 			Channel channel = this.weatherService.getForecast(board.getWoeid(), DegreeUnit.FAHRENHEIT);
 			
 			board.setTemperature(channel.getItem().getCondition().getTemp());
-			board.setDegreeUnits(channel.getUnits().getTemperature().name());
+			board.setDegreeUnits(Character.toString(channel.getUnits().getTemperature().name().charAt(0)));
 			board.setCode(channel.getItem().getCondition().getCode());
 			board.setDescription(channel.getItem().getCondition().getText());
 			board.setIconPath("http://l.yimg.com/a/i/us/we/52/".concat(String.valueOf(channel.getItem().getCondition().getCode())).concat(".gif"));

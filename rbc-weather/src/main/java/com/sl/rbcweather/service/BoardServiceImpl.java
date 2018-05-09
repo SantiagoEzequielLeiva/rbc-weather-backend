@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sl.rbcweather.dao.BoardRepository;
 import com.sl.rbcweather.model.Board;
+import com.sl.rbcweather.util.LocationFinder;
 
 /**
  * @author Santiago Leiva
@@ -43,9 +44,10 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Board updateBoard(Board board) {
 
-		board = weatherService.updateBoard(board);
-		
-		save(board);
+		if ( board.isReadyToUpdate() ) {
+			board = weatherService.updateBoard(board);
+			save(board);
+		}
 		
 		return board;
 	}
@@ -62,6 +64,26 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Board findByWoeid(String woeid) {
 		return this.boardRepository.findByWoeid(woeid);
+	}
+
+	@Override
+	public List<String> getWoeidByTerm(String term) {
+		return this.boardRepository.getWoeidByTerm(term);
+	}
+
+	@Override
+	public List<Board> findByTerm(String term) {
+		LocationFinder locationFinder = new LocationFinder();
+		
+		List<Board> boards = this.boardRepository.findByTerm(term);
+		
+		try {
+			boards.addAll(locationFinder.findByTerm(term, this.getWoeidByTerm(term)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return boards;
 	}
 
 }

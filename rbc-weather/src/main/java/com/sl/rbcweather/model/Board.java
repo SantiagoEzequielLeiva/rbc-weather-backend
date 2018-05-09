@@ -1,7 +1,9 @@
 package com.sl.rbcweather.model;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,6 +20,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -48,13 +51,16 @@ public class Board implements Serializable {
 	@Column(name = "country", nullable = false)
 	private String country;
 	
+	@Column(name = "place_type", nullable = false)
+	private String placeType;
+	
 	@Column(name = "woeid", unique = true, nullable = false)
 	private String woeid;
 
 	@Column(name = "temperature")
 	private Integer temperature;
 
-	@Column(name = "degree_units")
+	@Column(name = "degree_units", length = 1)
 	private String degreeUnits;
 
 	@Column(name = "icon_path")
@@ -78,5 +84,24 @@ public class Board implements Serializable {
 			},
 			mappedBy = "boards")
 	private Set<User> users = new HashSet<User>();
+	
+	/**
+	 * Se chequea si el board esta listo para actualizar.
+	 * Actualmente, se actualiza un board en caso que no tenga algun chequeo hecho o este haya sido hace mas de una hora.
+	 * @return Boolean
+	 */
+	@JsonIgnore
+	@Transient
+	public Boolean isReadyToUpdate() {
+		
+		if ( this.lastCheck == null ) {
+			return true;
+		} else {
+			Calendar uncheckedSince = GregorianCalendar.getInstance();
+			uncheckedSince.add(Calendar.HOUR_OF_DAY, -1);
+			
+			return this.lastCheck.before(uncheckedSince.getTime());
+		}
+	}
 
 }

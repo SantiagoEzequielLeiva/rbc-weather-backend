@@ -1,9 +1,7 @@
 package com.sl.rbcweather.util;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -28,14 +26,24 @@ public class LocationFinder {
 	/**
 	 * Se retorna un listado de Boards buscando primero las locaciones que coincidan con el termino ingresado.
 	 * @param term
+	 * @param woeidToDiscard
 	 * @return List<Board>
-	 * @throws IOException 
+	 * @throws Exception 
 	 */
-	public List<Board> findByTerm(String term) throws IOException {
+	public List<Board> findByTerm(String term, List<String> woeidToDiscard) throws Exception {
 		List<Board> boards = new ArrayList<Board>();
 		ObjectMapper mapper = new ObjectMapper().enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 
-		URL url = new URL( prepareQueryUrl(term) );
+		String query = prepareQuery(term, woeidToDiscard);
+		
+		StringBuilder sbUrl = new StringBuilder();
+		
+		sbUrl.append(LOCATION_FINDER_BASE_URL)
+			.append("?q=")
+			.append(query)
+			.append("&format=json");
+		
+		URL url = new URL( sbUrl.toString() );
 		HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 		
 		BufferedReader in = new BufferedReader( new InputStreamReader(connection.getInputStream()) );
@@ -47,7 +55,7 @@ public class LocationFinder {
 			response.append(inputLine);
 			
 		in.close();
-
+		
 		YahooQueryResponse queryResponse = mapper.readValue(response.toString(), YahooQueryResponse.class);
 		
 		for (Place place : queryResponse.getQuery().getResults().getPlace()) {
@@ -55,6 +63,7 @@ public class LocationFinder {
 			
 			board.setCity(place.getName());
 			board.setCountry(place.getCountry().getContent());
+			board.setPlaceType(place.getPlaceTypeName().getContent());
 			board.setWoeid(place.getWoeid());
 			
 			boards.add( board );
@@ -63,14 +72,24 @@ public class LocationFinder {
 		return boards;
 	}
 	
-	private String prepareQueryUrl(String term) throws UnsupportedEncodingException {
-		String urlString = LOCATION_FINDER_BASE_URL;
+	private String prepareQuery(String term, List<String> woeidToDiscard) throws Exception {
+		StringBuilder sbQuery = new StringBuilder();
 		
-		urlString += "?q=";
-		urlString += URLEncoder.encode("select * from geo.places where text = \"%" + term + "%\"", "UTF-8");
-		urlString += "&format=json";
+		sbQuery.append("select *")
+			.append(" from geo.places")
+			.append(" where text =")
+			.append(" \"%")
+			.append(term)
+			.append("%\"");
 		
-		return urlString;
+		if ( !woeidToDiscard.isEmpty() ) {
+			sbQuery.append(" and place.woeid")
+				.append(" not in (")
+				.append( woeidToDiscard.toString().replaceAll("[\\[.\\]]", "") )
+				.append(")");
+		}
+		
+		return URLEncoder.encode(sbQuery.toString(), "UTF-8");
 	}
 
 }
