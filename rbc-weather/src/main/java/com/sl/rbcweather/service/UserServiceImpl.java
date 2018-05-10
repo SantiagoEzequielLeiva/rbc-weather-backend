@@ -49,11 +49,13 @@ public class UserServiceImpl implements UserService {
 	public void addBoard(String username, Board board) {
 		User user = getByUsername(username);
 		
-		Board boardByWoeid = this.boardService.findByWoeid(board.getWoeid());
-		
-		/* Se chequea que no haya mas de un board con el mismo WOEID */
-		if ( boardByWoeid != null && boardByWoeid.getId() != null )
-			board = boardByWoeid;
+		if ( board.getId() == null ) {
+			/* En el caso que no venga un ID de board, se chequea que si existe uno en base al codigo WOEID */
+			Board boardByWoeid = this.boardService.findByWoeid(board.getWoeid());
+			
+			if ( boardByWoeid != null && boardByWoeid.getId() != null )
+				board = boardByWoeid;
+		}
 			
 		user.addBoard(boardService.updateBoard(board));
 
