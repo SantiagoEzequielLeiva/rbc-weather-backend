@@ -38,35 +38,37 @@ public class LocationFinder {
 		
 		StringBuilder sbUrl = new StringBuilder();
 		
-		sbUrl.append(LOCATION_FINDER_BASE_URL)
+		if ( query!=null && query!="" ) {
+			sbUrl.append(LOCATION_FINDER_BASE_URL)
 			.append("?q=")
 			.append(query)
 			.append("&format=json");
-		
-		URL url = new URL( sbUrl.toString() );
-		HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-		
-		BufferedReader in = new BufferedReader( new InputStreamReader(connection.getInputStream()) );
-		
-		String inputLine;
-		StringBuffer response = new StringBuffer();
-		
-		while ( (inputLine = in.readLine()) != null )
-			response.append(inputLine);
 			
-		in.close();
-		
-		YahooQueryResponse queryResponse = mapper.readValue(response.toString(), YahooQueryResponse.class);
-		
-		for (Place place : queryResponse.getQuery().getResults().getPlace()) {
-			Board board = new Board();
+			URL url = new URL( sbUrl.toString() );
+			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 			
-			board.setCity(place.getName());
-			board.setCountry(place.getCountry().getContent());
-			board.setPlaceType(place.getPlaceTypeName().getContent());
-			board.setWoeid(place.getWoeid());
+			BufferedReader in = new BufferedReader( new InputStreamReader(connection.getInputStream()) );
 			
-			boards.add( board );
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+			
+			while ( (inputLine = in.readLine()) != null )
+				response.append(inputLine);
+			
+			in.close();
+			
+			YahooQueryResponse queryResponse = mapper.readValue(response.toString(), YahooQueryResponse.class);
+			
+			for (Place place : queryResponse.getQuery().getResults().getPlace()) {
+				Board board = new Board();
+				
+				board.setCity(place.getName());
+				board.setCountry(place.getCountry().getContent());
+				board.setPlaceType(place.getPlaceTypeName().getContent());
+				board.setWoeid(place.getWoeid());
+				
+				boards.add( board );
+			}
 		}
 		
 		return boards;

@@ -20,7 +20,7 @@ import com.sl.rbcweather.service.BoardService;
 import com.sl.rbcweather.service.UserService;
 import com.sl.rbcweather.util.RestResponse;
 
-@CrossOrigin(origins="*", maxAge = 3600)
+@CrossOrigin
 @RestController
 @RequestMapping({"/boards"})
 public class BoardController {
@@ -58,7 +58,7 @@ public class BoardController {
 	
 	@GetMapping(value = "/location/{term}")
 	public List<Board> locationBoards(@PathVariable String term) {
-		return this.boardService.findByTerm(term);
+		return this.boardService.findByTerm(term.trim().toLowerCase());
 	}
 	
 }

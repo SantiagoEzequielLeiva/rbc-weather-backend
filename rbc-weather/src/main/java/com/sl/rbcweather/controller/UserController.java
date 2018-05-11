@@ -15,7 +15,7 @@ import com.sl.rbcweather.model.User;
 import com.sl.rbcweather.service.UserService;
 import com.sl.rbcweather.util.RestResponse;
 
-@CrossOrigin(origins="*", maxAge = 3600)
+@CrossOrigin
 @RestController
 @RequestMapping({"/users"})
 public class UserController {
