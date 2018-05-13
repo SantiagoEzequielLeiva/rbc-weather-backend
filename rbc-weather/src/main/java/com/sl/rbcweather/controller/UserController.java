@@ -1,5 +1,6 @@
 package com.sl.rbcweather.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sl.rbcweather.model.User;
 import com.sl.rbcweather.service.UserService;
 import com.sl.rbcweather.util.RestResponse;
+import com.sl.rbcweather.util.UserComparators;
 
 @CrossOrigin
 @RestController
@@ -25,7 +27,11 @@ public class UserController {
 	
 	@GetMapping
 	public List<User> users() {
-		return this.userService.list();
+		List<User> users = this.userService.list();
+		
+		Collections.sort(users, UserComparators.USERNAME);
+		
+		return users;
 	}
 	
 	@PostMapping

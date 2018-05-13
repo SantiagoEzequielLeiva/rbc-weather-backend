@@ -1,6 +1,7 @@
 package com.sl.rbcweather.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import com.sl.rbcweather.model.Board;
 import com.sl.rbcweather.model.User;
 import com.sl.rbcweather.service.BoardService;
 import com.sl.rbcweather.service.UserService;
+import com.sl.rbcweather.util.BoardComparators;
 import com.sl.rbcweather.util.LocationFinder;
 import com.sl.rbcweather.util.RestResponse;
 
@@ -33,14 +35,22 @@ public class BoardController {
 	
 	@GetMapping
 	public List<Board> boards() {
-		return this.boardService.list();
+		List<Board> boards = this.boardService.list();
+		
+		Collections.sort(boards, BoardComparators.CITY);
+		
+		return boards;
 	}
 	
 	@GetMapping(value = "/{username}")
 	public List<Board> userBoards(@PathVariable String username) {
 		User user = this.userService.getByUsername(username);
 		
-		return new ArrayList<Board>(user.getBoards());
+		List<Board> boards = new ArrayList<Board>(user.getBoards());
+		
+		Collections.sort(boards, BoardComparators.CITY);
+		
+		return boards;
 	}
 	
 	@PostMapping(value = "/{username}")
@@ -59,17 +69,18 @@ public class BoardController {
 	
 	@GetMapping(value = "/location/{term}")
 	public List<Board> locationBoards(@PathVariable String term) {
-		
 		term = term.trim().toLowerCase();
 		
 		if ( LocationFinder.isInPreviousSearches(term) ) {
-			return LocationFinder.getPreviousSearch(term);
+			return LocationFinder.getPreviousSearch(term); 
 		} else {
-			List<Board> boardsByLocation = this.boardService.findByTerm(term);
+			List<Board> boards = this.boardService.findByTerm(term);
 			
-			LocationFinder.addSearch(term, boardsByLocation);
+			Collections.sort(boards, BoardComparators.CITY);
 			
-			return boardsByLocation;
+			LocationFinder.addToPreviousSearches(term, boards);
+			
+			return boards;
 		}
 	}
 	

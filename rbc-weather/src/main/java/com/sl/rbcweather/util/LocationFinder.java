@@ -29,7 +29,7 @@ public class LocationFinder {
 	
 	public static List<Board> getPreviousSearch(String key) { return previousSearches.get(key); }
 	
-	public static void addSearch(String key, List<Board> value) { previousSearches.put(key, value); }
+	public static void addToPreviousSearches(String key, List<Board> value) { previousSearches.put(key, value); }
 	
 	private static final String LOCATION_FINDER_BASE_URL = "http://query.yahooapis.com/v1/public/yql";
 	
