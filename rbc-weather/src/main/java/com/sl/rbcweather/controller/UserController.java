@@ -32,9 +32,13 @@ public class UserController {
 	public RestResponse save(@RequestBody User user) {
 		
 		if ( !user.getUsername().equals(null) && !user.getUsername().equals("") ) {
-			this.userService.save(user);
-			
-			return new RestResponse(HttpStatus.OK.value(), "The user has been saved");
+			if ( this.userService.getByUsername(user.getUsername()) != null ) {
+				return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(), "Invalid username");
+			} else {
+				this.userService.save(user);
+				
+				return new RestResponse(HttpStatus.OK.value(), "The user has been saved");
+			}
 		} else {
 			return new RestResponse(HttpStatus.NOT_ACCEPTABLE.value(), "Not aceptable");
 		}
