@@ -6,7 +6,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +22,14 @@ import com.sl.rbcweather.util.yahooQuery.YahooQueryResponse;
  */
 
 public class LocationFinder {
+	
+	public static Map<String, List<Board>> previousSearches = new HashMap<String, List<Board>>();
+	
+	public static Boolean isInPreviousSearches(String key) { return previousSearches.containsKey(key); }
+	
+	public static List<Board> getPreviousSearch(String key) { return previousSearches.get(key); }
+	
+	public static void addSearch(String key, List<Board> value) { previousSearches.put(key, value); }
 	
 	private static final String LOCATION_FINDER_BASE_URL = "http://query.yahooapis.com/v1/public/yql";
 	

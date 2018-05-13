@@ -18,6 +18,7 @@ import com.sl.rbcweather.model.Board;
 import com.sl.rbcweather.model.User;
 import com.sl.rbcweather.service.BoardService;
 import com.sl.rbcweather.service.UserService;
+import com.sl.rbcweather.util.LocationFinder;
 import com.sl.rbcweather.util.RestResponse;
 
 @CrossOrigin
@@ -58,7 +59,18 @@ public class BoardController {
 	
 	@GetMapping(value = "/location/{term}")
 	public List<Board> locationBoards(@PathVariable String term) {
-		return this.boardService.findByTerm(term.trim().toLowerCase());
+		
+		term = term.trim().toLowerCase();
+		
+		if ( LocationFinder.isInPreviousSearches(term) ) {
+			return LocationFinder.getPreviousSearch(term);
+		} else {
+			List<Board> boardsByLocation = this.boardService.findByTerm(term);
+			
+			LocationFinder.addSearch(term, boardsByLocation);
+			
+			return boardsByLocation;
+		}
 	}
 	
 }
