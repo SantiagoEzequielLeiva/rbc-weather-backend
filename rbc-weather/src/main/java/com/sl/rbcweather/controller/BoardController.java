@@ -19,7 +19,7 @@ import com.sl.rbcweather.model.Board;
 import com.sl.rbcweather.model.User;
 import com.sl.rbcweather.service.BoardService;
 import com.sl.rbcweather.service.UserService;
-import com.sl.rbcweather.util.BoardComparators;
+import com.sl.rbcweather.util.BoardComparator;
 import com.sl.rbcweather.util.LocationFinder;
 import com.sl.rbcweather.util.RestResponse;
 
@@ -37,7 +37,7 @@ public class BoardController {
 	public List<Board> boards() {
 		List<Board> boards = this.boardService.list();
 		
-		Collections.sort(boards, BoardComparators.CITY);
+		Collections.sort(boards, BoardComparator.CITY);
 		
 		return boards;
 	}
@@ -48,7 +48,7 @@ public class BoardController {
 		
 		List<Board> boards = new ArrayList<Board>(user.getBoards());
 		
-		Collections.sort(boards, BoardComparators.CITY);
+		Collections.sort(boards, BoardComparator.CITY);
 		
 		return boards;
 	}
@@ -76,7 +76,7 @@ public class BoardController {
 		} else {
 			List<Board> boards = this.boardService.findByTerm(term);
 			
-			Collections.sort(boards, BoardComparators.CITY);
+			Collections.sort(boards, BoardComparator.CITY);
 			
 			LocationFinder.addToPreviousSearches(term, boards);
 			

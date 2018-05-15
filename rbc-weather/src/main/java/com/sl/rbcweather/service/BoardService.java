@@ -10,6 +10,11 @@ import com.sl.rbcweather.model.Board;
  */
 
 public interface BoardService {
+	
+	/**
+	 * Actualizamos los boards que correspondan
+	 */
+	void updateBoards();
 
 	/**
 	 * Listamos aquellos boards que esten listos para actualizar.

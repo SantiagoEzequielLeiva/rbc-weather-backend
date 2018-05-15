@@ -98,7 +98,8 @@ public class Board implements Serializable {
 			return true;
 		} else {
 			Calendar uncheckedSince = GregorianCalendar.getInstance();
-			uncheckedSince.add(Calendar.HOUR_OF_DAY, -1);
+			
+			uncheckedSince.add(Calendar.MINUTE, -30);
 			
 			return this.lastCheck.before(uncheckedSince.getTime());
 		}

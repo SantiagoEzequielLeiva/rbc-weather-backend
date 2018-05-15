@@ -56,7 +56,7 @@ public class BoardServiceImpl implements BoardService {
 	public List<Board> boardsReadyToUpdate() {
 		Calendar lastCheckCalendar = GregorianCalendar.getInstance();
 		
-		lastCheckCalendar.add(Calendar.HOUR, -1);
+		lastCheckCalendar.add(Calendar.MINUTE, -30);
 		
 		return this.boardRepository.findBoardsReadyToUpdate( lastCheckCalendar.getTime() );
 	}
@@ -84,6 +84,15 @@ public class BoardServiceImpl implements BoardService {
 		}
 		
 		return boards;
+	}
+
+	@Override
+	public void updateBoards() {
+		List<Board> boards = boardsReadyToUpdate();
+		
+		for (Board board : boards) {
+			updateBoard(board);
+		}
 	}
 
 }
